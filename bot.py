@@ -16,10 +16,10 @@ from telegram.ext import (
 BOT_TOKEN = "8967910142:AAGwqNC9wXGOThSZG2aU7k8Flm6tsBgFVpI"
 ADMIN_ID = 8336161180
 # 💳 Thanh toán — chọn 1 trong 2:
-QR_IMAGE = "IMG_5119.png        # Cách A: ảnh QR tĩnh (đặt file cùng thư mục)
-BANK_ID = ""               # Cách B: VD "MB", "VCB", "TPB"
-BANK_ACCOUNT = ""          # Số tài khoản
-BANK_OWNER = ""            # Tên không dấu
+QR_IMAGE = ""       # Cách A: ảnh QR tĩnh (đặt file cùng thư mục)
+BANK_ID = "MB"               # Cách B: VD "MB", "VCB", "TPB"
+BANK_ACCOUNT = "0333651484"          # Số tài khoản
+BANK_OWNER = "Luong Duc Anh"            # Tên không dấu
 
 # 🎮 CẤU HÌNH 2 SẢN PHẨM
 PRODUCTS = [
