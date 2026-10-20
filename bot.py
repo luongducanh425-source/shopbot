@@ -4,12 +4,12 @@ from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
 from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
 
 # ⚙️ ĐIỀN TOKEN VÀ ID CỦA BẠN
-BOT_TOKEN = "DÁN_TOKEN_CỦA_BẠN_VÀO_ĐÂY"
-ADMIN_ID = 123456789 
+BOT_TOKEN = "8967910142:AAGwqNC9wXGOThSZG2aU7k8Flm6tsBgFVpI"
+ADMIN_ID = 8336161180
 
 BANK_ID = "MB"                   
-BANK_ACCOUNT = "0123456789"      
-BANK_OWNER = "NGUYEN VAN A"      
+BANK_ACCOUNT = "0333651484"      
+BANK_OWNER = "Luong Duc Anh"     
 
 PRODUCTS = [
     {"name": "Token Discord Ngam", "price": 1500, "desc": "Acc ngâm, bao 24h."},
