@@ -16,7 +16,7 @@ from telegram.ext import (
 BOT_TOKEN = "8967910142:AAGwqNC9wXGOThSZG2aU7k8Flm6tsBgFVpI"
 ADMIN_ID = 8336161180
 # 💳 Thanh toán — chọn 1 trong 2:
-QR_IMAGE = "qr.jpg"        # Cách A: ảnh QR tĩnh (đặt file cùng thư mục)
+QR_IMAGE = "IMG_5119.png        # Cách A: ảnh QR tĩnh (đặt file cùng thư mục)
 BANK_ID = ""               # Cách B: VD "MB", "VCB", "TPB"
 BANK_ACCOUNT = ""          # Số tài khoản
 BANK_OWNER = ""            # Tên không dấu
@@ -25,7 +25,7 @@ BANK_OWNER = ""            # Tên không dấu
 PRODUCTS = [
     {
         "name": "Token Discord Ngâm",
-        "price": 1500,
+        "price": 1100,
         "desc": (
             "🎮 **Token Discord — Acc Ngâm**\n\n"
             "✅ Acc tạo lâu (trên 1 tháng)\n"
@@ -33,20 +33,20 @@ PRODUCTS = [
             "✅ Full quyền, không bị flag\n"
             "✅ Giao ngay sau thanh toán\n"
             "✅ Bảo hành 24h\n\n"
-            "💰 **Giá: 1.500đ / token**\n\n"
+            "💰 **Giá: 1.100đ / token**\n\n"
             "⚠️ Đổi mật khẩu ngay sau khi nhận"
         ),
     },
     {
         "name": "Token Discord Không Ngâm",
-        "price": 1000,
+        "price": 8000,
         "desc": (
             "🎮 **Token Discord — Acc Không Ngâm**\n\n"
             "✅ Acc mới tạo\n"
             "✅ Full quyền cơ bản\n"
             "✅ Giao ngay sau thanh toán\n"
             "✅ Bảo hành 12h\n\n"
-            "💰 **Giá: 1.000đ / token**\n\n"
+            "💰 **Giá: 800đ / token**\n\n"
             "⚠️ Đổi mật khẩu ngay sau khi nhận\n"
             "⚠️ Giá rẻ — phù hợp test"
         ),
