@@ -9,7 +9,7 @@ ADMIN_ID = 8336161180
 
 # 📞 2. ĐIỀN THÔNG TIN LIÊN HỆ
 ADMIN_NAME = "Đức Anh"
-ADMIN_PHONE = "0333651484
+ADMIN_PHONE = "0333651484"
 
 # 💳 3. ĐIỀN THÔNG TIN NGÂN HÀNG (Nếu dùng VietQR tự động)
 BANK_ID = "MB"                   
