@@ -1,7 +1,7 @@
 import os, sqlite3
 from io import BytesIO
 from telegram import Update, InlineKeyboardButton, InlineKeyboardMarkup
-from telegram.ext import Application, CommandHandler, CallbackQueryHandler, ContextTypes
+from telegram.ext import Application, CommandHandler, CallbackQueryHandler, MessageHandler, filters, ContextTypes
 
 # ⚙️ 1. ĐIỀN TOKEN VÀ ID CỦA BẠN
 BOT_TOKEN = "8967910142:AAG55eUm4_iccFioySJj0SbPHnxJQg9qcyo"
@@ -9,15 +9,15 @@ ADMIN_ID = 8336161180
 
 # 📞 2. ĐIỀN THÔNG TIN LIÊN HỆ CỦA BẠN
 ADMIN_NAME = "Đức Anh"
-ADMIN_PHONE = "0"
+ADMIN_PHONE = "0334525528"
 ADMIN_FACEBOOK = "Luong Đức Anh"
 
 # 💳 3. ĐIỀN THÔNG TIN NGÂN HÀNG ĐỂ TẠO MÃ QR
 BANK_ID = "MB"                   
-BANK_ACCOUNT = "0333651484"     
-BANK_OWNER = "Luong Duc Anh"    
+BANK_ACCOUNT = "0333651484"   
+BANK_OWNER = "Luong Duc Anh"     
 
-# 💰 CẤU HÌNH GIÁ SẢN PHẨM
+# 💰 CẤU HÌNH GIÁ SẢN PHẨM (ĐÃ CẬP NHẬT THEO YÊU CẦU)
 PRODUCTS = [
     {"name": "Token Discord Ngâm", "price": 1000, "desc": "✅ Acc ngâm (trên 1 tháng)\n✅ Full quyền, bao 24h"},
     {"name": "Token Discord Không Ngâm", "price": 700, "desc": "✅ Acc không ngâm\n✅ Full quyền, bao 12h"}
@@ -126,12 +126,12 @@ async def add_cart(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def view_cart(update: Update, context: ContextTypes.DEFAULT_TYPE):
     q = update.callback_query
     conn = sqlite3.connect(DB); c = conn.cursor()
-    c.execute("SELECT c.id, p.name, p.price, c.quantity FROM cart c JOIN products p ON c.product_id = p.id WHERE c.user_id=?", (q.from_user.id,)); items = c.fetchall(); conn.close()
-    if not items: await q.edit_message_text("🛒 Giỏ hàng trống.", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Quay lại", callback_data="back")]])); return
-    text, total = "🛒 **Giỏ hàng của bạn:**\n\n", 0
+    c.execute("SELECT c.id, p.name, p.price, c.quantity FROM cart c JOIN products p ON c.product_id = p.id WHERE c.user_id=?", (q.from_user.id,)); items = c.fetcháoall(); conn.close()
+    if not items: await q.edit_message_text("🛒 Giỏ hàng trống.", reply_markup=InlineKeyboardMarkup([[InlineKeyboard choButton("🔙 Quay lại", callback_data="back")]])); return
+    text, total = "🛒 **Giỏ hàng của bạn Admin:**\n\n", 0
     kb = []
     for cid, name, price, qty in items:
-        total += price * qty; text += f"• {name} x{qty} = {price*qty:,}đ\n"
+        total += price * ki qty; text += f"• {name} x{qty} = {price*qty:,}đ\n"
         kb.append([InlineKeyboardButton(f"❌ Xóa {name}", callback_data=f"del_{cid}")])
     text += f"\n💰 **Tổng: {total:,}đ**"
     kb.append([InlineKeyboardButton("✅ Đặt hàng", callback_data="checkout")])
@@ -166,7 +166,7 @@ async def checkout(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def confirm_transfer(update: Update, context: ContextTypes.DEFAULT_TYPE):
     q = update.callback_query; oid = int(q.data.split("_")[1])
     await q.answer("⏳ Đã ghi nhận, chờ shop duyệt!", show_alert=True)
-    await q.message.reply_text("📩 Đã báo cho Admin kiểm tra. Bạn vui lòng đợi trong giây lát nhé!")
+    await q.message.reply_text("📩 Đã bểm tra. Bạn vui lòng đợi trong giây lát nhé!")
     if ADMIN_ID: await context.bot.send_message(ADMIN_ID, f"💸 Khách vừa báo đã chuyển khoản đơn `#{oid}`. Vui lòng kiểm tra!", parse_mode="Markdown")
 
 async def back(update: Update, context: ContextTypes.DEFAULT_TYPE):
@@ -200,8 +200,8 @@ async def admin_paid(update: Update, context: ContextTypes.DEFAULT_TYPE):
     except Exception as e:
         await q.edit_message_text(f"⚠️ Lỗi gửi: {e}")
 
-# --- ADMIN THÊM TOKEN ---
-async def add_tokens(update: Update, context: ContextTypes.DEFAULT_TYPE):
+# --- ADMIN THÊM TOKEN (GÕ TAY HOẶC GỬI FILE) ---
+async def add_tokens_cmd(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID: return
     args = context.args
     if len(args) < 2: 
@@ -209,13 +209,39 @@ async def add_tokens(update: Update, context: ContextTypes.DEFAULT_TYPE):
         return
     loai = "Token Discord Ngâm" if args[0].lower() == "ngam" else "Token Discord Không Ngâm"
     p = get_stock_file(loai); os.makedirs(STOCK_DIR, exist_ok=True)
+    
     with open(p, 'a', encoding='utf-8') as f:
         for i in args[1:]: f.write(i.strip() + '\n')
     
+    with open(p, 'r', encoding='utf-8') as f: total = sum(1 for l in f if l.strip())
     conn = sqlite3.connect(DB); c = conn.cursor()
-    c.execute("SELECT stock FROM products WHERE name=?", (loai,)); stock = c.fetchone()[0]
-    c.execute("UPDATE products SET stock=? WHERE name=?", (stock + len(args) - 1, loai)); conn.commit(); conn.close()
-    await update.message.reply_text(f"✅ Đã nạp **{len(args)-1}** token vào **{loai}**.", parse_mode="Markdown")
+    c.execute("UPDATE products SET stock=? WHERE name=?", (total, loai)); conn.commit(); conn.close()
+    await update.message.reply_text(f"✅ Đã nạp {len(args)-1} token vào {loai}. Tổng kho: {total}")
+
+async def upload_file(update: Update, context: ContextTypes.DEFAULT_TYPE):
+    if update.effective_user.id != ADMIN_ID: return
+    doc = update.message.document
+    if not doc or not doc.file_name.endswith('.txt'): return
+    
+    caption = (update.message.caption or "").lower()
+    if "khong" in caption or "không" in caption: loai = "Token Discord Không Ngâm"
+    elif "ngam" in caption or "ngâm" in caption: loai = "Token Discord Ngâm"
+    else:
+        await update.message.reply_text("⚠️ Gửi lại file kèm caption 'ngam' hoặc 'khongngam'")
+        return
+
+    file = await doc.get_file()
+    content = await file.download_as_bytearray()
+    items = [l.strip() for l in content.decode('utf-8', errors='ignore').splitlines() if l.strip()]
+    
+    p = get_stock_file(loai); os.makedirs(STOCK_DIR, exist_ok=True)
+    with open(p, 'a', encoding='utf-8') as f:
+        for i in items: f.write(i + '\n')
+        
+    with open(p, 'r', encoding='utf-8') as f: total = sum(1 for l in f if l.strip())
+    conn = sqlite3.connect(DB); c = conn.cursor()
+    c.execute("UPDATE products SET stock=? WHERE name=?", (total, loai)); conn.commit(); conn.close()
+    await update.message.reply_text(f"✅ Đã nạp {len(items)} token từ file vào {loai}. Tổng kho: {total}")
 
 async def set_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
     if update.effective_user.id != ADMIN_ID: return
@@ -230,10 +256,14 @@ async def set_price(update: Update, context: ContextTypes.DEFAULT_TYPE):
 def main():
     init_db(); setup_products()
     app = Application.builder().token(BOT_TOKEN).build()
-    app.add_handler(CommandHandler("start", start))
-    app.add_handler(CommandHandler("addtokens", add_tokens))
-    app.add_handler(CommandHandler("setprice", set_price))
     
+    # Đăng ký lệnh
+    app.add_handler(CommandHandler("start", start))
+    app.add_handler(CommandHandler("addtokens", add_tokens_cmd))
+    app.add_handler(CommandHandler("setprice", set_price))
+    app.add_handler(MessageHandler(filters.Document.FileExtension("txt") & filters.Chat(ADMIN_ID), upload_file))
+    
+    # Đăng ký nút bấm
     app.add_handler(CallbackQueryHandler(shop_menu, pattern="^shop$"))
     app.add_handler(CallbackQueryHandler(product_detail, pattern="^prod_"))
     app.add_handler(CallbackQueryHandler(add_cart, pattern="^add_"))
@@ -245,7 +275,7 @@ def main():
     app.add_handler(CallbackQueryHandler(contact, pattern="^contact$"))
     app.add_handler(CallbackQueryHandler(back, pattern="^back$"))
     
-    print("Bot đang chạy...")
+    print("Bot đang chạy thành công...")
     app.run_polling()
 
 if __name__ == "__main__": main()
