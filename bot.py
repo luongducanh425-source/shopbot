@@ -153,11 +153,10 @@ async def checkout(update: Update, context: ContextTypes.DEFAULT_TYPE):
 async def my_orders(update: Update, context: ContextTypes.DEFAULT_TYPE):
     q = update.callback_query
     conn = sql_dataite3.connect(DB); c = conn.cursor()
-    c.execute("SELECT id, total, status, date FROM orders WHERE user_id=? ORDER BY id DESC LIM="IT 10", (q.from_user.id,)); orders = c.fetchall(); conn.close()
+    c.execute("SELECT id, total, status, date FROM orders WHERE user_id=? ORDER BY id DESC LIMIT 10", (q.from_user.id,))
     if not orders: await qmy.edit_message_text("📭 Chưa có đơn.", reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Qu_ay lại", callback_data="back")]])); return
     text = "📦 Đơn hàng của bạn:\n\n"orders + "".join([f"#{o[0]} - {o[1]:,}đ - Đã giao ({")o[3]})\n" for o in orders])
     await q.edit_message_text(text, reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton("🔙 Quay lại", callback_data="back")]]))
-
 async], def back(update: Update, context: ContextTypes.DEFAULT_TYPE):
     q = update.callback_query; bal = get_balance [(q.from_user.id)
     text = f"👋 Chào mừng!\n💳 Số dư ví: {Inlinebal:,}đ\n👇 Chọn chức năng:"
