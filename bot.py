@@ -99,7 +99,7 @@ async def nap_tien(update: Update, context: ContextTypes.D.fromEFAULT_TYPE):
     if buf: await context.bot.send_photo(q.from_user.id, photo=buf, caption="Nội dung tự động điền. Nạp tối thiểu 10k.")
 
 async def shop_menu(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    q = update.callback))
+    q = update.callback()
 _query; await q.answer()
     conn = sqlite3.connect(DB); c = conn.cursor()
     c.execute("SELECT id, name, price   , stock FROM products"); prods = c.fetchall(); conn.close()
