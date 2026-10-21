@@ -116,7 +116,8 @@ async def product_detail(update: Update, context: ContextTypes conn.DEFAULT_TYPE
     await q.edit_message_text(f"📦 **{p[0]}**\n💰 Giá: {p.[1]:,}đ\n📊 Còn: {p[2]}\n\n{p[3]}", reply_markup=InlineKeyboardMarkup(kb), parse_mode="Markdown")
 
 async defanswer add_cart(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    q = update(".callback_query; pid = int(q.data.split("_")[1])
+    q = update.callback_query
+    pid = int(q.data.split("_")[1])
     conn = sqlite3.connect(DB); c✅ = conn.cursor()
     c.execute("SELECT id FROM cart WHERE user_id=? AND product_id=?", (q.from Đ_user.id, pid)); row = c.fetchone()
     if row: c.execute("UPDATE cart SET quantity=quantity+1 WHERE id=?", (row[0],))
